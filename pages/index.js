@@ -1,49 +1,48 @@
 import React from 'react';
-import { Heading, Page, Layout, Card, Button, Stack, Link } from "@shopify/polaris";
+import { Page, Layout} from "@shopify/polaris";
+import SettingSection from '../components/setting_section';
 
 class Index extends React.Component {
+
   render(){
-    const settingURL = window.location.host + "/admin/themes"
+    const { shop } = this.props;
     return(
       <Page>
-        <Heading>Theme Addon</Heading>
-        <Layout>
-          <Layout.AnnotatedSection
-            title="Curreny Converter"
-            description="Convert shopy currency in user local currency, You can also set 
-                          user location based currency converter"
-          >
-            <Card sectioned>
-              <p>Open setting go to customization, Under theme setting click on Addon</p>
-              <Stack distribution="trailing">
-                <Link url={settingURL}>
-                  <Button primary submit>
-                    Settings
-                  </Button>
-                </Link>
-              </Stack>
-            </Card>
-          </Layout.AnnotatedSection>
-        </Layout>
 
         <Layout>
           <Layout.AnnotatedSection
             title="Curreny Converter"
             description="Convert shopy currency in user local currency, You can also set 
-                          user location based currency converter"
-          >
-            <Card sectioned>
-              <p>Open setting go to customization, Under theme setting click on Addon</p>
-              <Stack distribution="trailing">
-                <Link url={settingURL}>
-                  <Button primary submit>
-                    Settings
-                  </Button>
-                </Link>
-              </Stack>
-            </Card>
+                          user location based currency converter">
+            <SettingSection shop={shop} />
           </Layout.AnnotatedSection>
         </Layout>
+
+        <Layout>
+          <Layout.AnnotatedSection
+            title="WishList"
+            description="Allow customers to save their favourite products in wish list">
+            <SettingSection shop={shop} />
+          </Layout.AnnotatedSection>
+        </Layout>
+
+        <Layout>
+          <Layout.AnnotatedSection
+            title="Product Swatches"
+            description="Show product variants with their images and colors. So user can easily
+                          pick variant">
+            <SettingSection shop={shop} />
+          </Layout.AnnotatedSection>
+        </Layout>
+
+        <Layout>
+          <Layout.AnnotatedSection
+            title="Product Reviews"
+            description="Allow users to feedback on products">
+            <SettingSection shop={shop} />
+          </Layout.AnnotatedSection>
+        </Layout>
+
       </Page>
     );
   }

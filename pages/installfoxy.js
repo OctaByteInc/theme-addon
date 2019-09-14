@@ -2,7 +2,6 @@ import { Heading, Page, EmptyState } from "@shopify/polaris";
 
 const InstallFoxy = () => (
   <Page>
-    <Heading>Install Foxy Theme</Heading>
     <EmptyState
         heading="Install Foxy Theme"
         action={{content: 'Install', url: 'https://foxy.octabyte.io'}}

@@ -8,9 +8,10 @@ import next from "next";
 import Router from "koa-router";
 import session from "koa-session";
 import * as handlers from "./handlers/index";
+import db from '../backend/db';
 
 dotenv.config();
-const port = parseInt(process.env.PORT, 10) || 8081;
+const port = parseInt(process.env.PORT, 10) || 8080;
 const dev = process.env.NODE_ENV !== "production";
 const app = next({
   dev
@@ -33,7 +34,27 @@ app.prepare().then(() => {
         //Redirect to shop upon auth
         const { shop, accessToken } = ctx.session;
         ctx.cookies.set("shopOrigin", shop, { httpOnly: false });
-        await handlers.getSubscriptionUrl(ctx, accessToken, shop);
+
+        db.read(shop, (err, data) =>{
+          if(err){
+              console.log("ERROR: error while finding this shop in database");
+              ctx.redirect("/");
+              return;
+          }
+  
+          if(data){
+            if(data.app_charges){
+              console.log("AppCharges: This shop is already pay charges");
+              ctx.redirect("/");
+            }else{
+              await handlers.getSubscriptionUrl(ctx, accessToken, shop);
+            }
+          }else{
+            await handlers.getSubscriptionUrl(ctx, accessToken, shop);
+          }
+        });
+        
+
       }
     })
   );
@@ -65,6 +86,15 @@ app.prepare().then(() => {
 
     const responseJson = await response.json();
     ctx.session.acceptCharges = true;
+
+    const data = { app_charges: true };
+    db.create(shop, data, (err, savedData) => {
+      if(err){
+          console.log("ERROR: unable to save shop charges in database");
+          return;
+      }
+      console.log("SUCCESS: shop charges are saved in database");
+    });
     
     const themes = await fetch(`https://${shop}/admin/themes.json`,{
       method: 'GET',
@@ -81,7 +111,10 @@ app.prepare().then(() => {
       const theme = availableThemes[i];
       if(theme.role == 'main'){
         if(theme.name.toLowerCase().includes("foxy")){
-          const assets = await fetch(`https://${shop}/admin/api/2019-07/themes/73064218696/assets.json?asset[key]=config/settings_schema.json`,{
+          
+          //ctx.cookies.set("themeId", theme.id, { httpOnly: false });
+
+          const assets = await fetch(`https://${shop}/admin/api/2019-07/themes/${theme.id}/assets.json?asset[key]=config/settings_schema.json`,{
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',

@@ -1,7 +1,24 @@
 {
-  "name": "shopify-node-app",
+  "name": "theme-addon",
   "version": "1.0.0",
-  "description": "Shopify's node app for CLI tool",
+  "description": "Theme addon for Shopify theme developed by OctaByte",
+  "main": "./server/index.js",
+  "engines": {
+    "node": ">=8"
+  },
+  "private": true,
+  "cloud-repo-tools": {
+    "requiresKeyFile": true,
+    "requiresProjectId": true,
+    "test": {
+      "app": {
+        "args": [
+          "./server/index.js"
+        ],
+        "msg": "Theme addon for Shopify theme developed by OctaByte"
+      }
+    }
+  },
   "scripts": {
     "test": "jest",
     "dev": "NODE_ENV=development nodemon ./server/index.js --watch ./server/index.js",
@@ -14,12 +31,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Shopify/shopify-node-app.git"
+    "url": "git+https://github.com/OctaByteInc/theme-addon.git"
   },
-  "author": "Shopify Inc.",
-  "license": "MIT",
+  "author": "OctaByte Inc.",
+  "license": "GNU",
   "bugs": {
-    "url": "https://github.com/shopify/shopify-node-app/issues"
+    "url": "https://github.com/OctaByteInc/theme-addon.git"
   },
   "jest": {
     "clearMocks": true
@@ -48,7 +65,15 @@
     "next-env": "^1.1.0",
     "react": "^16.8.6",
     "react-apollo": "^2.5.6",
-    "react-dom": "^16.8.6"
+    "react-dom": "^16.8.6",
+    "@google-cloud/datastore": "^3.1.0",
+    "nconf": "^0.10.0",
+    "prompt": "^1.0.0",
+    "pug": "^2.0.3",
+    "uglify-js": "^3.4.9",
+    "nonce": "^1.0.4",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.4"
   },
   "devDependencies": {
     "@babel/plugin-transform-runtime": "^7.4.3",
@@ -63,7 +88,11 @@
     "nodemon": "^1.18.11",
     "prettier": "1.17.0",
     "react-addons-test-utils": "15.6.2",
-    "react-test-renderer": "16.4.2"
+    "react-test-renderer": "16.4.2",
+    "@google-cloud/nodejs-repo-tools": "^3.0.0",
+    "ava": "^0.25.0",
+    "proxyquire": "^2.1.0",
+    "sinon": "^7.0.0"
   },
   "husky": {
     "hooks": {

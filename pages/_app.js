@@ -15,6 +15,7 @@ class MyApp extends App {
   render() {
     const { Component, pageProps } = this.props;
     const shopOrigin = Cookies.get("shopOrigin");
+    const shop = this.props.router.query.shop;
     return (
       <Container>
         <AppProvider>
@@ -26,7 +27,7 @@ class MyApp extends App {
             }}
           >
             <ApolloProvider client={client}>
-              <Component {...pageProps} />
+              <Component {...pageProps} shop={shop}  />
             </ApolloProvider>
           </Provider>
         </AppProvider>
