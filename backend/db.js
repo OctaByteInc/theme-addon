@@ -122,10 +122,19 @@ function update(name, data, cb) {
       data: toDatastore(newData, ['description']),
     };
   
-    ds.save(entity, err => {
-      data = entity.key;
-      cb(err, err ? null : data);
+    return new Promise(resolve => {
+      ds.save(entity, err => {
+        data = entity.key;
+        if(err){
+          console.log(err);
+          resolve("ERROR");
+        }else{
+          resolve(data);
+        }
+      });
     });
+    
+
   });
 
   
@@ -143,27 +152,38 @@ function create(name, data, cb) {
     data: toDatastore(data, ['description']),
   };
 
-  ds.save(entity, err => {
-    data = entity.key;
-    cb(err, err ? null : data);
+  return new Promise( resolve => {
+    ds.save(entity, err => {
+      data = entity.key;
+      if(err){
+        console.log(err);
+        resolve("ERROR");
+      }else{
+        resolve(data);
+      }
+    });
   });
 }
 
 function read(name, cb) {
   const key = ds.key([kind, name]);
-  ds.get(key, (err, entity) => {
-    if (!err && !entity) {
-      err = {
-        code: 404,
-        message: 'Not found',
-      };
-    }
-    if (err) {
-      cb(err);
-      return;
-    }
-    cb(null, fromDatastore(entity));
+  return new Promise( resolve => {
+    ds.get(key, (err, entity) => {
+      if (!err && !entity) {
+        err = {
+          code: 404,
+          message: 'Not found',
+        };
+      }
+      if (err) {
+        resolve("ERROR");
+      }else{
+        resolve(fromDatastore(entity));
+      }
+      
+    });
   });
+  
 }
 
 function _delete(name, cb) {

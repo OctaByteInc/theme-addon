@@ -35,6 +35,20 @@ app.prepare().then(() => {
         const { shop, accessToken } = ctx.session;
         ctx.cookies.set("shopOrigin", shop, { httpOnly: false });
 
+        const respond = await db.read(shop);
+        console.log(respond);
+        if(respond === "ERROR"){
+          console.log("ERROR: error while finding this shop in database");
+          await handlers.getSubscriptionUrl(ctx, accessToken, shop);
+        } else {
+          if(respond.app_charges){
+            console.log("AppCharges: This shop is already pay charges");
+            ctx.redirect("/");
+          }else{
+            await handlers.getSubscriptionUrl(ctx, accessToken, shop);
+          }
+        }
+/* 
         db.read(shop, (err, data) =>{
           if(err){
               console.log("ERROR: error while finding this shop in database");
@@ -53,7 +67,7 @@ app.prepare().then(() => {
             await handlers.getSubscriptionUrl(ctx, accessToken, shop);
           }
         });
-        
+         */
 
       }
     })
@@ -87,14 +101,21 @@ app.prepare().then(() => {
     const responseJson = await response.json();
     ctx.session.acceptCharges = true;
 
-    const data = { app_charges: true };
-    db.create(shop, data, (err, savedData) => {
+    const sendData = { app_charges: true };
+
+    const respond = await db.create(shop, sendData);
+    if(respond === "ERROR"){
+      console.log("ERROR: unable to save shop charges in database");
+    }else{
+      console.log("SUCCESS: shop charges are saved in database");
+    }
+    /* db.create(shop, data, (err, savedData) => {
       if(err){
           console.log("ERROR: unable to save shop charges in database");
           return;
       }
       console.log("SUCCESS: shop charges are saved in database");
-    });
+    }); */
     
     const themes = await fetch(`https://${shop}/admin/themes.json`,{
       method: 'GET',
