@@ -48,26 +48,6 @@ app.prepare().then(() => {
             await handlers.getSubscriptionUrl(ctx, accessToken, shop);
           }
         }
-/* 
-        db.read(shop, (err, data) =>{
-          if(err){
-              console.log("ERROR: error while finding this shop in database");
-              ctx.redirect("/");
-              return;
-          }
-  
-          if(data){
-            if(data.app_charges){
-              console.log("AppCharges: This shop is already pay charges");
-              ctx.redirect("/");
-            }else{
-              await handlers.getSubscriptionUrl(ctx, accessToken, shop);
-            }
-          }else{
-            await handlers.getSubscriptionUrl(ctx, accessToken, shop);
-          }
-        });
-         */
 
       }
     })
@@ -109,13 +89,6 @@ app.prepare().then(() => {
     }else{
       console.log("SUCCESS: shop charges are saved in database");
     }
-    /* db.create(shop, data, (err, savedData) => {
-      if(err){
-          console.log("ERROR: unable to save shop charges in database");
-          return;
-      }
-      console.log("SUCCESS: shop charges are saved in database");
-    }); */
     
     const themes = await fetch(`https://${shop}/admin/themes.json`,{
       method: 'GET',
