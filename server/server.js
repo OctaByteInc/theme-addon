@@ -159,6 +159,16 @@ app.prepare().then(() => {
                   "default": false
                 },
                 {
+                  "type": "header",
+                  "content": "Buy Now"
+                },
+                {
+                  "type": "checkbox",
+                  "id": "addon_product_buy_now",
+                  "label": "Enable product Buy Now button",
+                  "default": false
+                },
+                {
                   "type":"header",
                   "content": "Product Reviews"
                 },
