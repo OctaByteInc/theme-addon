@@ -36,7 +36,6 @@ app.prepare().then(() => {
         ctx.cookies.set("shopOrigin", shop, { httpOnly: false });
 
         const respond = await db.read(shop);
-        console.log(respond);
         if(respond === "ERROR"){
           console.log("ERROR: error while finding this shop in database");
           await handlers.getSubscriptionUrl(ctx, accessToken, shop);
