@@ -42,6 +42,7 @@ app.prepare().then(() => {
         } else {
           if(respond.app_charges){
             console.log("AppCharges: This shop is already pay charges");
+            ctx.session.acceptChargesApp = true;
             ctx.redirect("/");
           }else{
             await handlers.getSubscriptionUrl(ctx, accessToken, shop);
@@ -55,13 +56,13 @@ app.prepare().then(() => {
   server.use(graphQLProxy({ version: ApiVersion.July19 }));
 
   router.get("/", verifyRequest(), async ctx => {
-    const { acceptCharges, shop } = ctx.session;
-    if(acceptCharges) {
+    const { acceptChargesApp, shop } = ctx.session;
+    if(acceptChargesApp) {
       await handle(ctx.req, ctx.res);
       ctx.respond = false;
       ctx.res.statusCode = 200;
     }else{
-      ctx.redirect(`${process.env.HOST}/auth?shop=${shop}`);
+      ctx.redirect('/payfoxy');
     }
   });
 
@@ -78,7 +79,7 @@ app.prepare().then(() => {
     })
 
     const responseJson = await response.json();
-    ctx.session.acceptCharges = true;
+    ctx.session.acceptChargesApp = true;
 
     const sendData = { app_charges: true };
 
@@ -105,8 +106,6 @@ app.prepare().then(() => {
       if(theme.role == 'main'){
         if(theme.name.toLowerCase().includes("foxy")){
           
-          //ctx.cookies.set("themeId", theme.id, { httpOnly: false });
-
           const assets = await fetch(`https://${shop}/admin/api/2019-07/themes/${theme.id}/assets.json?asset[key]=config/settings_schema.json`,{
             method: 'GET',
             headers: {
@@ -188,7 +187,7 @@ app.prepare().then(() => {
                 value: JSON.stringify(assetList)
               }
             };
-            const sr = await fetch(`https://${shop}/admin/api/2019-07/themes/73064218696/assets.json`,{
+            const sr = await fetch(`https://${shop}/admin/api/2019-07/themes/${theme.id}/assets.json`,{
               method: 'PUT',
               headers: {
                 'Content-Type': 'application/json',

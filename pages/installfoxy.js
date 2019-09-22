@@ -1,4 +1,4 @@
-import { Heading, Page, EmptyState } from "@shopify/polaris";
+import { Page, EmptyState } from "@shopify/polaris";
 
 const InstallFoxy = () => (
   <Page>
@@ -9,6 +9,7 @@ const InstallFoxy = () => (
     >
         <p>Currently this app is only work with Foxy Theme</p>
     </EmptyState>
+    <p>Install it from this link (https://foxy.octabyte.io)</p>
   </Page>
 );
 
