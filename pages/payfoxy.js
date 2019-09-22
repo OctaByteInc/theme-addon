@@ -8,6 +8,7 @@ class PayFoxy extends React.Component {
       <Page>
           <EmptyState
                 heading="Accept App Charges"
+                action={{content: 'Re Install'}}
                 image="https://cdn.shopify.com/s/files/1/0757/9955/files/empty-state.svg"
             >
                 <p>
